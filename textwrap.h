@@ -3,7 +3,7 @@
 namespace textwrap
 {
 	template<std::size_t Row, std::size_t StrLen, typename Data, std::size_t... Cols >
-	constexpr int wrap_impl2(Data& data, const char* str, std::size_t& pos, std::index_sequence<Cols...>)
+	constexpr int wrap_store(Data& data, const char* str, std::size_t& pos, std::index_sequence<Cols...>)
 	{
 		([&]() { data[Row][Cols] = str[(Cols + (sizeof...(Cols) * Row)) > StrLen ? StrLen : (Cols + (sizeof...(Cols) * Row))]; return 0; }() + ...);
 		return 0;
@@ -13,7 +13,7 @@ namespace textwrap
 	constexpr int wrap_impl(Data& data, const char* str, std::index_sequence<Rows...>)
 	{
 		std::size_t pos{ 0 };
-		int l[] = { (wrap_impl2<Rows, StrLen>(data, str, pos, std::make_index_sequence<Width>{}))... };
+		int l[] = { (wrap_store<Rows, StrLen>(data, str, pos, std::make_index_sequence<Width>{}))... };
 		return 0;
 	}
 
