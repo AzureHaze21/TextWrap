@@ -17,7 +17,7 @@ namespace textwrap
 		return 0;
 	}
 
-	template<std::size_t Width, typename T, std::size_t N>
+	template<std::size_t Width = 70, typename T, std::size_t N>
 	constexpr decltype(auto) wrap(const T(&str)[N])
 	{
 		static_assert(Width > 0);
