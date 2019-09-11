@@ -1,7 +1,7 @@
 #include <array>
 
 namespace textwrap
-{	
+{
 	template<std::size_t Row, std::size_t StrLen, typename Data, std::size_t... Cols >
 	constexpr int wrap_impl2(Data& data, const char* str, std::size_t& pos, std::index_sequence<Cols...>)
 	{
@@ -25,9 +25,9 @@ namespace textwrap
 		constexpr auto Length = Width > (N - 1) ? (N - 1) : Width;
 		constexpr auto Height = (Length == (N - 1)) ? 1 : ((N - 1) / Length) + ((N - 1) - ((N - 1) / Length) > 0 ? 1 : 0);
 
-		using Line = std::array<char, Length>;
+		using Line = std::array<char, Length + 1>; // '\0'
 		using List = std::array<Line, Height>;
-		
+
 		List data{};
 		wrap_impl<Length, N - 1>(data, str, std::make_index_sequence<Height>{});
 
