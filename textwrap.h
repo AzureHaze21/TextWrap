@@ -33,4 +33,30 @@ namespace textwrap
 
 		return data;
 	}
+	
+	template<std::size_t Width, typename Data, std::size_t... Len>
+	constexpr int fill_impl(Data& data, const char* str, std::index_sequence<Len...>)
+	{
+		std::size_t pos{ 0u };
+
+		([&]() {
+			if constexpr (Len > 0 && !(Len % Width)) { data[pos++] = '\n'; }
+			data[pos++] = str[Len];
+		}(), ...);
+
+		return 0;
+	}
+
+	template<std::size_t Width = 70U, typename T, std::size_t N>
+	constexpr decltype(auto) fill(const T(&str)[N])
+	{
+		constexpr auto Height = N / Width;
+		constexpr auto TotalLength = N + Height - 1;
+
+		auto line = std::array<T, TotalLength>{};
+
+		fill_impl<Width>(line, str, std::make_index_sequence<N>{});
+
+		return line;
+	}
 }
